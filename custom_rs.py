@@ -58,6 +58,7 @@ class CollabTrustRecSys(SymmetricAlgo):
                     self.trust_mat[row["trustor"], row["trustee"]] = row["trust_value"]
                 except IndexError:
                     pass
+
             self.calculate_weights_sim_trust()
 
         return self

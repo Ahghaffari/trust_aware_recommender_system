@@ -6,13 +6,13 @@ import numpy as np
 from custom_rs import CollabTrustRecSys
 import random
 
-max_neighbour_users = 40
-model_type_selection = "1"
+max_neighbour_users = 1508
+model_type_selection = "3"
 
 def collaborative_filtering(train_data, test_data, trust_data, k, min_k, model_type):
     sim_options = {'name': 'pearson', 'user_based': True}
     model = CollabTrustRecSys(k=k, model_type=model_type, sim_options=sim_options, min_k=min_k)
-    model.fit(train_data, trust_data=trust_data, nu_u=k)
+    model.fit(trainset=train_data, trust_data=trust_data, nu_u=k)
     predictions = model.test(test_data)
     
     return predictions
@@ -25,7 +25,7 @@ def train_test_split_each_user(data, train_size_percentage=0.8, random_state=42)
     selected_elements_train = []
     selected_elements_test = []
     for indx, row in data.iterrows():
-        if temp == row["user_id"] and indx<=(len(data)-1):
+        if temp==row["user_id"] and indx<(len(data)-1):
             last_data.append(row)
         else:
             num_elements_to_select = round(train_size_percentage * len(last_data))
@@ -37,8 +37,9 @@ def train_test_split_each_user(data, train_size_percentage=0.8, random_state=42)
                     selected_elements_train.append(item) 
                 else:
                     selected_elements_test.append(item)
-            last_data = []
+            last_data = [row]
             temp = row["user_id"]
+        
 
     return selected_elements_train, selected_elements_test
 
